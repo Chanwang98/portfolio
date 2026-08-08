@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f3f4f8"/>
+      <stop offset="1" stop-color="#e6e9f5"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#g)"/>
+  <rect x="40" y="40" width="1120" height="820" rx="18" fill="none" stroke="#c7cbe0" stroke-width="3" stroke-dasharray="10 10"/>
+  <g font-family="Arial, 'Microsoft YaHei', sans-serif" text-anchor="middle">
+    <text x="600" y="430" font-size="46" font-weight="600" fill="#8a90b0">作品图片 · Work Image</text>
+    <text x="600" y="495" font-size="26" fill="#a4a9c4">请将 assets/images/work-N.jpg 替换为你的作品图</text>
+  </g>
+</svg>
