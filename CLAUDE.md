@@ -9,7 +9,7 @@ A zero-dependency, single-page personal portfolio (plain HTML/CSS/JS) for Chan W
 ## Commands
 
 - **Preview**: open `index.html` in a browser (`start index.html`). No server needed — the site is fully static.
-- **Deploy / update the live site**: this folder is a git repo whose remote is `https://github.com/Chanwang98/chanwang98.github.io.git`. GitHub Pages auto-deploys from the `main` branch root, and the site is live at `https://chanwang98.github.io/`. To update, commit and push (Pages rebuilds in 1–2 min):
+- **Deploy / update the live site**: this folder is a git repo whose remote is `https://github.com/Chanwang98/portfolio.git` (repo was renamed from `chanwang98.github.io` on 2026-08-09). GitHub Pages auto-deploys from the `main` branch root, and the site is live at `https://chanwang98.github.io/portfolio/`. To update, commit and push (Pages rebuilds in 1–2 min):
   ```bash
   git add .
   git commit -m "…"
