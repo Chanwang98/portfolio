@@ -9,7 +9,14 @@ A zero-dependency, single-page personal portfolio (plain HTML/CSS/JS) for Chan W
 ## Commands
 
 - **Preview**: open `index.html` in a browser (`start index.html`). No server needed — the site is fully static.
-- **Deploy**: push the folder contents to a `username.github.io` GitHub repo; GitHub Pages serves the repo root. Full steps in `README.md`.
+- **Deploy / update the live site**: this folder is a git repo whose remote is `https://github.com/Chanwang98/chanwang98.github.io.git`. GitHub Pages auto-deploys from the `main` branch root, and the site is live at `https://chanwang98.github.io/`. To update, commit and push (Pages rebuilds in 1–2 min):
+  ```bash
+  git add .
+  git commit -m "…"
+  git push
+  ```
+  Git auth is already configured via `gh auth setup-git` (no login prompts). `.nojekyll` in the repo root keeps Jekyll from processing the page.
+- **Push gotcha**: the local network reaches `github.com` only intermittently (random TCP timeouts). If `git push` fails with "Could not connect to server", just retry — it usually succeeds on the next attempt. `api.github.com` (used by `gh`) is generally stable; don't change network/proxy settings.
 
 ## Architecture
 
@@ -18,7 +25,7 @@ One page, three hand-written files:
 - `index.html` — all content and structure.
 - `assets/css/style.css` — design system (CSS variables in `:root`) and all styling.
 - `assets/js/main.js` — language toggle, scroll-reveal, portfolio lightbox, nav highlighting.
-- `assets/images/` — avatar + work images (only placeholder SVGs exist so far).
+- `assets/images/` — `avatar.jpg` (real photo) plus `work-N.jpg` works (still placeholders) with fallback SVGs.
 
 ### Bilingual pattern (most important)
 
@@ -47,7 +54,7 @@ Elements without `data-zh` are static across languages (used for the two English
 
 ## Content state
 
-Name, title, about, education, experience, projects, and contact are real content. The portfolio images and their one-line captions are still placeholders. `✏️ 替换` comments in `index.html` and the replacement table in `README.md` mark what still needs filling in.
+Name, title, about, education, experience, projects, and contact are real content and the site is live. The portfolio images and their one-line captions are still placeholders — drop real `work-N.jpg` files and fill captions before finalizing. `✏️ 替换` comments in `index.html` and the replacement table in `README.md` mark what still needs filling in.
 
 ## README
 
