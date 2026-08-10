@@ -82,6 +82,8 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .brand-last {
   color: var(--accent);
@@ -596,12 +598,19 @@ a.contact-item:hover {
   /* 导航：移动端变成可横滑的一行，避免拥挤 */
   .nav-links {
     gap: 18px;
+    min-width: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a { white-space: nowrap; }
+
+  /* 语言切换：移动端只显示当前语言（中文模式「中」、英文模式「EN」） */
+  .lang-toggle .lang-sep { display: none; }
+  .lang-toggle .lang-zh:not(.active),
+  .lang-toggle .lang-en:not(.active) { display: none; }
+  .lang-toggle { padding: 6px 10px; }
 
   .project-grid { grid-template-columns: 1fr; }
   .work-grid { grid-template-columns: 1fr; }
