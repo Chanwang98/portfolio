@@ -25,7 +25,7 @@ One page, three hand-written files:
 - `index.html` — all content and structure.
 - `assets/css/style.css` — design system (CSS variables in `:root`) and all styling.
 - `assets/js/main.js` — language toggle, scroll-reveal, portfolio lightbox, nav highlighting.
-- `assets/images/` — `avatar.jpg` (real photo) plus `work-N.jpg` works (still placeholders) with fallback SVGs.
+- `assets/images/` — `avatar.jpg` (real photo), `work-1.jpg` … `work-6.jpg` (real works), plus fallback SVGs.
 
 ### Bilingual pattern (most important)
 
@@ -45,6 +45,7 @@ Elements without `data-zh` are static across languages (used for the two English
 ### Image convention
 
 - Works: `<img src="assets/images/work-N.jpg" onerror="this.onerror=null;this.src='assets/images/placeholder.svg'">`. A missing file silently falls back to `placeholder.svg`, so the page never shows broken images. Adding a work = drop `work-N.jpg` into `assets/images/` and copy one `<figure class="work">` block in `index.html`.
+- Thumbnails use `object-fit: contain` on a pure-white (`#fff`) placeholder background, so the full image always shows (letterboxed, never cropped). The `aspect-ratio: 4 / 3` on `.work-thumb` only sets the box shape.
 - Avatar: `assets/images/avatar.jpg`, falls back to `avatar-placeholder.svg`.
 
 ### Grid layouts
@@ -54,8 +55,8 @@ Elements without `data-zh` are static across languages (used for the two English
 
 ## Content state
 
-Name, title, about, education, experience, projects, and contact are real content and the site is live. The portfolio images and their one-line captions are still placeholders — drop real `work-N.jpg` files and fill captions before finalizing. `✏️ 替换` comments in `index.html` and the replacement table in `README.md` mark what still needs filling in.
+All content is real and the site is live. The portfolio has 6 works (`work-1.jpg`…`work-6.jpg`), each showing only a bilingual title (no one-line caption). Display order = `work-N` numbering + `<figure>` order in `index.html`: DLP 智能大灯设计 #1–#3, DLP 光机设计, ADB 大灯设计, 工装设计.
 
 ## README
 
-`README.md` is the user-facing fill-in guide and deploy tutorial, including a "作品区怎么自己改" section explaining how to change images, captions, add/remove works, and tweak grid columns. Keep it in sync whenever content structure changes.
+`README.md` is the maintenance and deploy tutorial, including a "作品区怎么改" section explaining how to change images, titles, add/remove works, and tweak grid columns. Keep it in sync whenever content structure changes.

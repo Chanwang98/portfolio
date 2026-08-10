@@ -434,14 +434,14 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
   overflow: hidden;
   border-radius: var(--radius);
   aspect-ratio: 4 / 3;
-  background: #eceef5;
+  background: #fff;
   border: 1px solid var(--line);
   transition: box-shadow .25s ease;
 }
 .work-thumb img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   transition: transform .5s ease;
 }
 .work:hover .work-thumb { box-shadow: var(--shadow-md); }
