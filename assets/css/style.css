@@ -83,7 +83,11 @@ section[id] { scroll-margin-top: calc(var(--nav-h) + 12px); }
   font-weight: 800;
   letter-spacing: -.02em;
 }
-.brand-dot { color: var(--accent); }
+.brand-last {
+  color: var(--accent);
+  font-size: 15px;
+  font-weight: 600;
+}
 
 .nav-links {
   display: flex;
