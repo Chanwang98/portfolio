@@ -108,8 +108,25 @@
 
   /* ---------- 导航高亮 + 吸顶阴影 ---------- */
   var header = document.getElementById('siteHeader');
+  var navList = document.querySelector('.nav-links');
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
   var sections = Array.prototype.slice.call(document.querySelectorAll('section[id]'));
+  var lastActiveLink = null;
+
+  // 移动端导航可横向滚动：高亮项切换时，把它滚进可视区域（居中）
+  function scrollActiveIntoView(a) {
+    if (!navList) return;
+    if (navList.scrollWidth <= navList.clientWidth) return; // 无横向溢出（桌面端）不处理
+    var navRect = navList.getBoundingClientRect();
+    var aRect = a.getBoundingClientRect();
+    var target = navList.scrollLeft + (aRect.left - navRect.left) - (navList.clientWidth / 2) + (aRect.width / 2);
+    target = Math.max(0, Math.min(target, navList.scrollWidth - navList.clientWidth));
+    if ('scrollTo' in navList) {
+      navList.scrollTo({ left: target, behavior: 'smooth' });
+    } else {
+      navList.scrollLeft = target;
+    }
+  }
 
   function onScroll() {
     var y = window.scrollY;
@@ -120,9 +137,17 @@
       if (y + 140 >= sec.offsetTop) currentId = sec.getAttribute('id');
     });
 
+    var activeLink = null;
     navLinks.forEach(function (a) {
-      a.classList.toggle('active', a.getAttribute('href') === '#' + currentId);
+      var isActive = a.getAttribute('href') === '#' + currentId;
+      a.classList.toggle('active', isActive);
+      if (isActive) activeLink = a;
     });
+
+    if (activeLink && activeLink !== lastActiveLink) {
+      scrollActiveIntoView(activeLink);
+      lastActiveLink = activeLink;
+    }
   }
 
   window.addEventListener('scroll', onScroll, { passive: true });

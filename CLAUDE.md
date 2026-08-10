@@ -24,7 +24,7 @@ One page, three hand-written files:
 
 - `index.html` — all content and structure.
 - `assets/css/style.css` — design system (CSS variables in `:root`) and all styling.
-- `assets/js/main.js` — language toggle, scroll-reveal, portfolio lightbox, nav highlighting.
+- `assets/js/main.js` — language toggle, scroll-reveal, portfolio lightbox, nav highlighting (with mobile auto-scroll of the active link).
 - `assets/images/` — `avatar.jpg` (real photo), `work-1.jpg` … `work-6.jpg` (real works), plus fallback SVGs.
 
 ### Bilingual pattern (most important)
@@ -53,9 +53,15 @@ Elements without `data-zh` are static across languages (used for the two English
 - `.project-grid` uses `repeat(auto-fit, minmax(320px, 1fr))` so 2 or 3 project cards both fill the row cleanly.
 - `.work-grid` uses `repeat(3, 1fr)`; `aspect-ratio: 4 / 3` on `.work-thumb` controls image shape. Both are overridden at the ≤900px / ≤640px breakpoints.
 
+### Mobile (≤640px)
+
+- `.brand` ("Chan Wang") stays on one line via `white-space: nowrap` + `flex-shrink: 0` — never wraps even when the nav is cramped.
+- `.nav-links` becomes a horizontally scrollable row (`overflow-x: auto`, `min-width: 0`). `scrollActiveIntoView()` in `main.js` auto-centers the newly-active link when the scroll-spy highlight switches, so the current section is always visible in the nav.
+- The language toggle collapses to only the current language (`中` or `EN`): CSS hides `.lang-en`/`.lang-zh` when not `.active`, and `applyLang()` keeps `.active` on the current one. Keep the `lang-zh` / `lang-sep` / `lang-en` spans if restructuring the button.
+
 ## Content state
 
-All content is real and the site is live. The portfolio has 6 works (`work-1.jpg`…`work-6.jpg`), each showing only a bilingual title (no one-line caption). Display order = `work-N` numbering + `<figure>` order in `index.html`: DLP 智能大灯设计 #1–#3, DLP 光机设计, ADB 大灯设计, 工装设计.
+All content is real and the site is live. The portfolio has 6 works (`work-1.jpg`…`work-6.jpg`), each showing only a bilingual title (no one-line caption). Display order = `work-N` numbering + `<figure>` order in `index.html`: DLP 智能大灯设计 #1–#3, DLP 光机设计, ADB 大灯设计, 工装设计. The nav brand shows `Chan Wang` (last name smaller + accent-colored), the browser tab title is just `王耀琛`, the Goertek career title is `结构研发岗`, and the experience date range is bilingual (`2024 – 至今` / `2024 – Present`).
 
 ## README
 
