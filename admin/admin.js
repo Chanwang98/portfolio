@@ -3,6 +3,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 const SUPABASE_URL = 'https://duwwzswqlgocohowmybb.supabase.co';
 const PUBLISHABLE_KEY = 'sb_publishable_VVsjij_XFVkC0a4VS1XIaw_JxR4CZeA';
 const ADMIN_EMAIL = 'wangyaochen963@126.com';
+const ADMIN_URL = 'https://chanwang98.github.io/portfolio/admin/';
 const supabase = createClient(SUPABASE_URL, PUBLISHABLE_KEY, {
   auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
 });
@@ -12,6 +13,8 @@ const authCard = $('#authCard');
 const dashboard = $('#dashboard');
 const authMessage = $('#authMessage');
 const dashboardMessage = $('#dashboardMessage');
+const authForm = $('#authForm');
+const resetForm = $('#resetForm');
 let refreshTimer;
 
 function setAuthMessage(message, isError = false) {
@@ -23,6 +26,15 @@ function showDashboard(show) {
   authCard.hidden = show;
   dashboard.hidden = !show;
   if (!show) window.clearInterval(refreshTimer);
+}
+
+function showPasswordReset(show) {
+  authCard.hidden = false;
+  dashboard.hidden = true;
+  authForm.hidden = show;
+  resetForm.hidden = !show;
+  window.clearInterval(refreshTimer);
+  if (show) $('#newPassword').focus();
 }
 
 async function signIn(event) {
@@ -44,7 +56,11 @@ async function signUp() {
   const password = $('#password').value;
   if (email !== ADMIN_EMAIL) return setAuthMessage('只能使用已授权的管理员邮箱注册。', true);
   if (password.length < 8) return setAuthMessage('密码至少需要 8 位。', true);
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: ADMIN_URL }
+  });
   if (error) return setAuthMessage(error.message, true);
   if (data.session) {
     showDashboard(true);
@@ -53,6 +69,39 @@ async function signUp() {
   } else {
     setAuthMessage('账号已创建。请前往邮箱完成验证，然后返回此页登录。');
   }
+}
+
+async function requestPasswordReset() {
+  const email = $('#email').value.trim().toLowerCase();
+  if (email !== ADMIN_EMAIL) return setAuthMessage('该邮箱没有后台访问权限。', true);
+  setAuthMessage('正在发送密码重置邮件…');
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: ADMIN_URL });
+  if (error) return setAuthMessage(error.message, true);
+  setAuthMessage('重置邮件已发送。请在邮箱中打开链接，并在本页面设置新密码。');
+}
+
+async function updatePassword(event) {
+  event.preventDefault();
+  const password = $('#newPassword').value;
+  const confirmation = $('#confirmPassword').value;
+  if (password.length < 8) return setAuthMessage('新密码至少需要 8 位。', true);
+  if (password !== confirmation) return setAuthMessage('两次输入的密码不一致。', true);
+  setAuthMessage('正在更新密码…');
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) return setAuthMessage(error.message, true);
+  await supabase.auth.signOut();
+  history.replaceState(null, '', ADMIN_URL);
+  resetForm.reset();
+  showPasswordReset(false);
+  setAuthMessage('密码已更新，请使用新密码登录。');
+}
+
+async function cancelPasswordReset() {
+  await supabase.auth.signOut();
+  history.replaceState(null, '', ADMIN_URL);
+  resetForm.reset();
+  showPasswordReset(false);
+  setAuthMessage('已取消密码重置。');
 }
 
 async function loadStats() {
@@ -139,14 +188,37 @@ function startRefresh() {
   refreshTimer = window.setInterval(loadStats, 30000);
 }
 
-$('#authForm').addEventListener('submit', signIn);
+authForm.addEventListener('submit', signIn);
+resetForm.addEventListener('submit', updatePassword);
 $('#signUpBtn').addEventListener('click', signUp);
+$('#forgotPasswordBtn').addEventListener('click', requestPasswordReset);
+$('#cancelResetBtn').addEventListener('click', cancelPasswordReset);
 $('#refreshBtn').addEventListener('click', loadStats);
 $('#rangeSelect').addEventListener('change', loadStats);
 $('#logoutBtn').addEventListener('click', async () => { await supabase.auth.signOut(); showDashboard(false); setAuthMessage('已安全退出。'); });
 
+const hashParams = new URLSearchParams(location.hash.slice(1));
+const searchParams = new URLSearchParams(location.search);
+let recoveryMode = hashParams.get('type') === 'recovery' || searchParams.get('type') === 'recovery';
+const callbackError = hashParams.get('error_description') || searchParams.get('error_description');
+
+supabase.auth.onAuthStateChange((event) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    recoveryMode = true;
+    showPasswordReset(true);
+    setAuthMessage('身份验证成功，请设置新密码。');
+  }
+});
+
 const { data: { session } } = await supabase.auth.getSession();
-if (session) {
+if (callbackError) {
+  history.replaceState(null, '', ADMIN_URL);
+  showPasswordReset(false);
+  setAuthMessage('邮件链接无效或已过期，请重新发起验证或密码重置。', true);
+} else if (recoveryMode && session) {
+  showPasswordReset(true);
+  setAuthMessage('身份验证成功，请设置新密码。');
+} else if (session) {
   showDashboard(true);
   await loadStats();
   startRefresh();

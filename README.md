@@ -84,10 +84,13 @@ git push
 - 后台地址：`https://chanwang98.github.io/portfolio/admin/`
 - 管理员邮箱：`wangyaochen963@126.com`
 - 首次使用：在后台点击“首次使用，创建账号”，设置至少 8 位密码，并完成邮箱验证。
+- 忘记密码：在登录页点击“忘记密码”，邮件验证后可在后台页面设置新密码。
 - 数据范围：实时在线人数、今日/区间浏览量、独立访客、日期与时段分布、国家/城市、设备以及最近访问记录。
 - 隐私：数据库只保存脱敏 IP（如 `116.23.xxx.xxx`）和按日生成的不可逆访客摘要，不保存完整 IP。
 
 访问采集通过 Supabase Edge Functions 完成，数据库表默认拒绝浏览器直接访问；统计接口仅向授权管理员返回数据。数据库结构保存在 `supabase/migrations/`。
+
+Supabase Auth 的 Site URL 与允许跳转地址应设置为 `https://chanwang98.github.io/portfolio/admin/`，确保注册验证与密码重置邮件返回线上后台，而不是本地开发地址。
 
 ## ❓ 常见问题
 

@@ -23,6 +23,18 @@
         </label>
         <button class="primary" type="submit">登录后台</button>
         <button class="secondary" id="signUpBtn" type="button">首次使用，创建账号</button>
+        <button class="text-button" id="forgotPasswordBtn" type="button">忘记密码？发送重置邮件</button>
+      </form>
+      <form id="resetForm" hidden>
+        <p class="recovery-copy">请设置新的管理员密码。保存后需要使用新密码重新登录。</p>
+        <label>新密码
+          <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required placeholder="至少 8 位" />
+        </label>
+        <label>确认新密码
+          <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required placeholder="再次输入新密码" />
+        </label>
+        <button class="primary" type="submit">保存新密码</button>
+        <button class="secondary" id="cancelResetBtn" type="button">取消</button>
       </form>
       <p class="message" id="authMessage" role="status"></p>
       <a class="back-link" href="../">← 返回个人主页</a>
