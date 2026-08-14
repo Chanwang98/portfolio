@@ -132,6 +132,7 @@ function render(data) {
   $('#todayValue').textContent = data.summary.today_views;
   $('#visitorsValue').textContent = data.summary.unique_visitors;
   $('#viewsValue').textContent = data.summary.pageviews;
+  $('#durationValue').textContent = formatDuration(data.summary.average_duration_seconds);
   renderTrend(data.timeseries);
   renderHours(data.hourly);
   renderLocations(data.locations, data.summary.pageviews);
@@ -164,11 +165,22 @@ function renderLocations(items, total) {
 
 function renderRecent(items) {
   const body = $('#recentBody');
-  if (!items.length) return body.innerHTML = '<tr><td colspan="6" class="empty">暂无访问记录</td></tr>';
+  if (!items.length) return body.innerHTML = '<tr><td colspan="7" class="empty">暂无访问记录</td></tr>';
   body.innerHTML = items.map((item) => {
     const active = Date.now() - new Date(item.last_seen).getTime() < 90000;
-    return `<tr><td>${new Date(item.first_seen).toLocaleString('zh-CN')}</td><td>${escapeHtml([item.country, item.city].filter(Boolean).join(' · ') || '未知')}</td><td><code>${escapeHtml(item.ip_masked || '未知')}</code></td><td>${escapeHtml(item.page_path || '/')}</td><td class="ua">${escapeHtml(deviceName(item.user_agent))}</td><td><span class="status ${active ? 'online' : ''}">${active ? '在线' : '已离开'}</span></td></tr>`;
+    return `<tr><td>${new Date(item.first_seen).toLocaleString('zh-CN')}</td><td>${escapeHtml([item.country, item.city].filter(Boolean).join(' · ') || '未知')}</td><td><code>${escapeHtml(item.ip_masked || '未知')}</code></td><td>${escapeHtml(item.page_path || '/')}</td><td class="ua">${escapeHtml(deviceName(item.user_agent))}</td><td>${formatDuration(item.duration_seconds)}</td><td><span class="status ${active ? 'online' : ''}">${active ? '在线' : '已离开'}</span></td></tr>`;
   }).join('');
+}
+
+function formatDuration(value) {
+  const seconds = Math.max(0, Math.round(Number(value) || 0));
+  if (seconds < 60) return `${seconds} 秒`;
+  const minutes = Math.floor(seconds / 60);
+  const remainder = seconds % 60;
+  if (minutes < 60) return remainder ? `${minutes} 分 ${remainder} 秒` : `${minutes} 分钟`;
+  const hours = Math.floor(minutes / 60);
+  const minuteRemainder = minutes % 60;
+  return minuteRemainder ? `${hours} 小时 ${minuteRemainder} 分` : `${hours} 小时`;
 }
 
 function deviceName(ua = '') {
