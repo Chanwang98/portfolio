@@ -1,8 +1,5 @@
 name: Kitchen Android APK
 on:
-  push:
-    branches: [main]
-    paths: ['recipes/**', 'kitchen-android/**', '.github/workflows/kitchen-android.yml']
   workflow_dispatch:
 permissions:
   contents: read
