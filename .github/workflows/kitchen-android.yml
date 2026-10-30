@@ -1,5 +1,8 @@
 name: Kitchen Android APK
 on:
+  push:
+    branches: [main]
+    paths: ['kitchen-android/android/app/build.gradle']
   workflow_dispatch:
 permissions:
   contents: read
